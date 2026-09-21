@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DevPulse</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            margin-bottom: 30px;
+        }
+
+        input {
+            width: 70%;
+            padding: 12px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .dashboard {
+            margin-top: 30px;
+            padding: 25px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .metrics {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric {
+            padding: 20px;
+            background: #eee;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .recommendation {
+            margin-top: 25px;
+            padding: 20px;
+            background: #eef6ff;
+            border-radius: 8px;
+        }
+
+        #error {
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>DevPulse 🚀</h1>
+
+    <div>
+        <input
+            type="text"
+            id="projectName"
+            placeholder="Enter project name"
+        >
+
+        <button onclick="analyzeProject()">
+            Analyze Project
+        </button>
+    </div>
+
+    <div id="error"></div>
+
+    <div class="dashboard" id="dashboard" style="display: none;">
+
+        <h2>Project Health</h2>
+
+        <h3 id="health"></h3>
+
+        <p>
+            Score:
+            <strong id="score"></strong>
+        </p>
+
+        <div class="metrics">
+
+            <div class="metric">
+                <div>Branches</div>
+                <div class="metric-value" id="branches">-</div>
+            </div>
+
+            <div class="metric">
+                <div>Commits</div>
+                <div class="metric-value" id="commits">-</div>
+            </div>
+
+            <div class="metric">
+                <div>Open PRs</div>
+                <div class="metric-value" id="prs">-</div>
+            </div>
+
+            <div class="metric">
+                <div>Dependencies</div>
+                <div class="metric-value" id="dependencies">-</div>
+            </div>
+
+        </div>
+
+        <div class="recommendation">
+
+            <h3>Recommendation</h3>
+
+            <p id="recommendation"></p>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        async function analyzeProject() {
+
+            const projectName =
+                document.getElementById("projectName").value;
+
+            const errorElement =
+                document.getElementById("error");
+
+            const dashboard =
+                document.getElementById("dashboard");
+
+            if (!projectName) {
+                errorElement.textContent =
+                    "Please enter a project name.";
+
+                return;
+            }
+
+            try {
+
+                const response = await fetch(
+                    "/api/analyze?project_name="
+                    + encodeURIComponent(projectName),
+                    {
+                        method: "POST"
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error("API request failed");
+                }
+
+                const data = await response.json();
+
+                console.log(data);
+
+                document.getElementById("health").textContent =
+                    "Health: " + data.health;
+
+                document.getElementById("score").textContent =
+                    data.score;
+
+                document.getElementById("branches").textContent =
+                    data.branches;
+
+                document.getElementById("commits").textContent =
+                    data.commits;
+
+                document.getElementById("prs").textContent =
+                    data.open_prs;
+
+                document.getElementById("dependencies").textContent =
+                    data.dependencies;
+
+                document.getElementById("recommendation").textContent =
+                    data.recommendation;
+
+                dashboard.style.display = "block";
+
+                errorElement.textContent = "";
+
+            } catch (error) {
+
+                console.error(error);
+
+                errorElement.textContent =
+                    "Could not connect to backend.";
+
+            }
+        }
+
+    </script>
+
+</body>
+</html>
