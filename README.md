@@ -1,4 +1,4 @@
-# DevPulse
+# DataLineage-AI
 
 DevPulse is a developer project health dashboard.
 
