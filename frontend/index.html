@@ -1,214 +1,1571 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>DevPulse</title>
+```
+<title>TripPilot AI</title>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #f5f5f5;
+<style>
+
+    body {
+        font-family: Arial, sans-serif;
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #f5f7fb;
+        color: #222;
+    }
+
+    h1 {
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        color: #666;
+        margin-bottom: 30px;
+    }
+
+    .card {
+        background: white;
+        padding: 25px;
+        margin-bottom: 20px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .trip-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .trip-info {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        margin-top: 20px;
+    }
+
+    .info-box {
+        padding: 15px;
+        background: #f1f3f6;
+        border-radius: 8px;
+    }
+
+    .info-label {
+        font-size: 13px;
+        color: #666;
+    }
+
+    .info-value {
+        margin-top: 5px;
+        font-size: 17px;
+        font-weight: bold;
+    }
+
+    button {
+        padding: 13px 22px;
+        border: none;
+        border-radius: 8px;
+        background: #111827;
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+
+    button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    #status {
+        margin-top: 15px;
+        color: #666;
+    }
+
+
+    /* =========================
+       BOOKINGS
+    ========================= */
+
+    .booking-section {
+        margin-top: 20px;
+    }
+
+    .booking-section h3 {
+        margin-bottom: 10px;
+    }
+
+    .booking-item {
+        padding: 15px;
+        margin-bottom: 10px;
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 8px;
+    }
+
+    .booking-title {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .booking-details {
+        margin-top: 6px;
+        color: #666;
+        line-height: 1.5;
+    }
+
+
+    /* =========================
+       ITINERARY TIMELINE
+    ========================= */
+
+    .itinerary-day {
+        margin-bottom: 35px;
+    }
+
+    .itinerary-date {
+        font-size: 14px;
+        font-weight: bold;
+        color: #666;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+    }
+
+    .timeline {
+        position: relative;
+        margin-left: 10px;
+    }
+
+    .timeline::before {
+        content: "";
+        position: absolute;
+        left: 20px;
+        top: 25px;
+        bottom: 25px;
+        width: 2px;
+        background: #e5e7eb;
+    }
+
+    .itinerary-item {
+        position: relative;
+        display: grid;
+        grid-template-columns: 45px 90px 1fr;
+        gap: 15px;
+        padding: 12px 0;
+    }
+
+    .timeline-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #f1f3f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        z-index: 1;
+    }
+
+    .time {
+        padding-top: 10px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .itinerary-content {
+        background: #fafafa;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 15px 18px;
+    }
+
+    .title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .description {
+        margin-top: 6px;
+        color: #666;
+        line-height: 1.5;
+    }
+
+    .location {
+        margin-top: 8px;
+        color: #777;
+        font-size: 14px;
+    }
+
+
+    /* =========================
+       STATUS
+    ========================= */
+
+    .conflicts {
+        margin-top: 20px;
+        padding: 15px;
+        background: #fff4f4;
+        border-radius: 8px;
+        color: #a00;
+    }
+
+    .success {
+        margin-top: 20px;
+        padding: 15px;
+        background: #f0fff4;
+        border-radius: 8px;
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 700px) {
+
+        .trip-info {
+            grid-template-columns: repeat(2, 1fr);
         }
 
-        h1 {
-            margin-bottom: 30px;
+        .itinerary-item {
+            grid-template-columns: 45px 1fr;
+            gap: 10px;
         }
 
-        input {
-            width: 70%;
-            padding: 12px;
-            font-size: 16px;
+        .time {
+            grid-column: 2;
+            grid-row: 1;
+            padding-top: 0;
         }
 
-        button {
-            padding: 12px 20px;
-            font-size: 16px;
-            cursor: pointer;
+        .itinerary-content {
+            grid-column: 2;
+            grid-row: 2;
         }
 
-        .dashboard {
-            margin-top: 30px;
-            padding: 25px;
-            background: white;
-            border-radius: 10px;
+        .timeline-icon {
+            grid-column: 1;
+            grid-row: 1 / span 2;
         }
 
-        .metrics {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+        .trip-header {
+            flex-direction: column;
+            align-items: flex-start;
             gap: 15px;
-            margin-top: 20px;
         }
 
-        .metric {
-            padding: 20px;
-            background: #eee;
-            border-radius: 8px;
-            text-align: center;
-        }
+    }
 
-        .metric-value {
-            font-size: 28px;
-            font-weight: bold;
-        }
+</style>
+```
 
-        .recommendation {
-            margin-top: 25px;
-            padding: 20px;
-            background: #eef6ff;
-            border-radius: 8px;
-        }
-
-        #error {
-            color: red;
-            margin-top: 20px;
-        }
-    </style>
 </head>
 
 <body>
 
-    <h1>DevPulse 🚀</h1>
+```
+<h1>TripPilot AI ✈️</h1>
 
-    <div>
-        <input
-            type="text"
-            id="projectName"
-            placeholder="Enter project name"
+<div class="subtitle">
+    One intelligent place for your entire trip.
+</div>
+
+<div class="card">
+
+    <label
+        for="tripSelector"
+        style="font-weight: bold;"
+    >
+        Select Trip
+    </label>
+
+    <select
+        id="tripSelector"
+        style="
+            display: block;
+            margin-top: 10px;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        "
+    >
+        <option value="">
+            Loading trips...
+        </option>
+    </select>
+
+</div>
+
+<!-- =========================
+     TRIP INFORMATION
+========================== -->
+
+<div class="card">
+
+    <div class="trip-header">
+
+        <div>
+
+            <h2 id="tripName">
+                Loading trip...
+            </h2>
+
+            <div id="destination"></div>
+
+        </div>
+
+
+        <button
+            id="generateButton"
+            onclick="generateItinerary()"
         >
-
-        <button onclick="analyzeProject()">
-            Analyze Project
+            Generate AI Itinerary
         </button>
+
     </div>
 
-    <div id="error"></div>
 
-    <div class="dashboard" id="dashboard" style="display: none;">
+    <div class="trip-info">
 
-        <h2>Project Health</h2>
+        <div class="info-box">
 
-        <h3 id="health"></h3>
+            <div class="info-label">
+                Start Date
+            </div>
+
+            <div
+                class="info-value"
+                id="startDate"
+            >
+                -
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <div class="info-label">
+                End Date
+            </div>
+
+            <div
+                class="info-value"
+                id="endDate"
+            >
+                -
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <div class="info-label">
+                Travelers
+            </div>
+
+            <div
+                class="info-value"
+                id="travelers"
+            >
+                -
+            </div>
+
+        </div>
+
+
+        <div class="info-box">
+
+            <div class="info-label">
+                Budget
+            </div>
+
+            <div
+                class="info-value"
+                id="budget"
+            >
+                -
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="status"></div>
+
+</div>
+
+
+<!-- =========================
+     BOOKINGS & PLANS
+========================== -->
+
+<div class="card">
+
+    <h2>
+        📋 Bookings & Plans
+    </h2>
+
+    <div id="bookings">
+        Loading bookings...
+    </div>
+
+</div>
+
+
+<!-- =========================
+     ITINERARY
+========================== -->
+
+<div class="card">
+
+    <h2>
+        🗓️ Itinerary
+    </h2>
+
+    <div id="itinerary">
 
         <p>
-            Score:
-            <strong id="score"></strong>
+            Click
+            <strong>
+                Generate AI Itinerary
+            </strong>
+            to create your itinerary.
         </p>
-
-        <div class="metrics">
-
-            <div class="metric">
-                <div>Branches</div>
-                <div class="metric-value" id="branches">-</div>
-            </div>
-
-            <div class="metric">
-                <div>Commits</div>
-                <div class="metric-value" id="commits">-</div>
-            </div>
-
-            <div class="metric">
-                <div>Open PRs</div>
-                <div class="metric-value" id="prs">-</div>
-            </div>
-
-            <div class="metric">
-                <div>Dependencies</div>
-                <div class="metric-value" id="dependencies">-</div>
-            </div>
-
-        </div>
-
-        <div class="recommendation">
-
-            <h3>Recommendation</h3>
-
-            <p id="recommendation"></p>
-
-        </div>
 
     </div>
 
+</div>
 
-    <script>
 
-        async function analyzeProject() {
+<script>
 
-            const projectName =
-                document.getElementById("projectName").value;
+    let tripId = null;
 
-            const errorElement =
-                document.getElementById("error");
 
-            const dashboard =
-                document.getElementById("dashboard");
+    async function loadTrips() {
 
-            if (!projectName) {
-                errorElement.textContent =
-                    "Please enter a project name.";
+    const selector =
+        document.getElementById(
+            "tripSelector"
+        );
 
+    try {
+
+        const response =
+            await fetch(
+                "/api/trips"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not load trips"
+            );
+
+        }
+
+
+        const trips =
+            await response.json();
+
+
+        selector.innerHTML = "";
+
+
+        if (trips.length === 0) {
+
+            selector.innerHTML =
+                '<option value="">' +
+                'No trips available' +
+                '</option>';
+
+            return;
+
+        }
+
+
+        trips.forEach(
+            trip => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    trip.id;
+
+                option.textContent =
+                    trip.name +
+                    " — " +
+                    trip.destination;
+
+                selector.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        /*
+         * Select the first trip
+         * by default.
+         */
+
+        tripId =
+            trips[0].id;
+
+
+        /*
+         * Load data for the
+         * selected trip.
+         */
+
+        await loadTrip();
+
+        await loadBookings();
+
+        await loadItinerary();
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        selector.innerHTML =
+            '<option value="">' +
+            'Could not load trips' +
+            '</option>';
+
+    }
+
+}
+
+document
+    .getElementById("tripSelector")
+    .addEventListener(
+        "change",
+        async function () {
+
+            const selectedTripId =
+                this.value;
+
+
+            if (!selectedTripId) {
                 return;
             }
 
-            try {
 
-                const response = await fetch(
-                    "/api/analyze?project_name="
-                    + encodeURIComponent(projectName),
-                    {
-                        method: "POST"
+            tripId =
+                Number(selectedTripId);
+
+
+            /*
+             * Reload trip information
+             * and bookings.
+             */
+
+            await loadTrip();
+
+            await loadBookings();
+
+            await loadItinerary();
+
+
+            /*
+             * Clear the previous
+             * generated itinerary.
+             */
+
+
+
+            document.getElementById(
+                "status"
+            ).textContent = "";
+
+        }
+    );
+
+    /* =========================
+       LOAD TRIP
+    ========================== */
+
+    async function loadTrip() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/trips/" +
+                    tripId +
+                    "/summary"
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Could not load trip"
+                );
+
+            }
+
+
+            const data =
+                await response.json();
+
+
+            const trip =
+                data.trip;
+
+
+            document.getElementById(
+                "tripName"
+            ).textContent =
+                trip.name;
+
+
+            document.getElementById(
+                "destination"
+            ).textContent =
+                trip.destination;
+
+
+            document.getElementById(
+                "startDate"
+            ).textContent =
+                trip.start_date;
+
+
+            document.getElementById(
+                "endDate"
+            ).textContent =
+                trip.end_date;
+
+
+            document.getElementById(
+                "travelers"
+            ).textContent =
+                trip.travelers;
+
+
+            document.getElementById(
+                "budget"
+            ).textContent =
+                trip.budget
+                    ? trip.currency +
+                      " " +
+                      trip.budget
+                    : "Not specified";
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            document.getElementById(
+                "tripName"
+            ).textContent =
+                "Could not load trip";
+
+        }
+
+    }
+
+
+    /* =========================
+       LOAD BOOKINGS
+    ========================== */
+
+    async function loadBookings() {
+
+        const container =
+            document.getElementById(
+                "bookings"
+            );
+
+
+        try {
+
+            const flightsResponse =
+                await fetch(
+                    "/api/trips/" +
+                    tripId +
+                    "/flights"
+                );
+
+
+            const hotelsResponse =
+                await fetch(
+                    "/api/trips/" +
+                    tripId +
+                    "/hotels"
+                );
+
+
+            const activitiesResponse =
+                await fetch(
+                    "/api/trips/" +
+                    tripId +
+                    "/activities"
+                );
+
+
+            if (
+                !flightsResponse.ok ||
+                !hotelsResponse.ok ||
+                !activitiesResponse.ok
+            ) {
+
+                throw new Error(
+                    "Could not load bookings"
+                );
+
+            }
+
+
+            const flights =
+                await flightsResponse.json();
+
+
+            const hotels =
+                await hotelsResponse.json();
+
+
+            const activities =
+                await activitiesResponse.json();
+
+
+            container.innerHTML = "";
+
+
+            /* =========================
+               FLIGHTS
+            ========================== */
+
+            const flightSection =
+                document.createElement(
+                    "div"
+                );
+
+
+            flightSection.className =
+                "booking-section";
+
+
+            flightSection.innerHTML =
+                "<h3>✈️ Flights</h3>";
+
+
+            if (flights.length === 0) {
+
+                flightSection.innerHTML +=
+                    "<p>No flights added.</p>";
+
+            } else {
+
+                flights.forEach(
+                    flight => {
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        item.className =
+                            "booking-item";
+
+
+                        item.innerHTML = `
+                            <div class="booking-title">
+                                ${flight.airline}
+                                ${flight.flight_number}
+                            </div>
+
+                            <div class="booking-details">
+                                ${flight.departure_airport}
+                                →
+                                ${flight.arrival_airport}
+                                <br>
+
+                                ${flight.departure_date}
+                                ${flight.departure_time.substring(0, 5)}
+                                –
+                                ${flight.arrival_date}
+                                ${flight.arrival_time.substring(0, 5)}
+
+                                <br>
+
+                                Booking:
+                                ${flight.booking_reference || "N/A"}
+                            </div>
+                        `;
+
+
+                        flightSection.appendChild(
+                            item
+                        );
+
                     }
                 );
 
-                if (!response.ok) {
-                    throw new Error("API request failed");
-                }
+            }
 
-                const data = await response.json();
 
-                console.log(data);
+            container.appendChild(
+                flightSection
+            );
 
-                document.getElementById("health").textContent =
-                    "Health: " + data.health;
 
-                document.getElementById("score").textContent =
-                    data.score;
+            /* =========================
+               HOTELS
+            ========================== */
 
-                document.getElementById("branches").textContent =
-                    data.branches;
+            const hotelSection =
+                document.createElement(
+                    "div"
+                );
 
-                document.getElementById("commits").textContent =
-                    data.commits;
 
-                document.getElementById("prs").textContent =
-                    data.open_prs;
+            hotelSection.className =
+                "booking-section";
 
-                document.getElementById("dependencies").textContent =
-                    data.dependencies;
 
-                document.getElementById("recommendation").textContent =
-                    data.recommendation;
+            hotelSection.innerHTML =
+                "<h3>🏨 Hotels</h3>";
 
-                dashboard.style.display = "block";
 
-                errorElement.textContent = "";
+            if (hotels.length === 0) {
 
-            } catch (error) {
+                hotelSection.innerHTML +=
+                    "<p>No hotels added.</p>";
 
-                console.error(error);
+            } else {
 
-                errorElement.textContent =
-                    "Could not connect to backend.";
+                hotels.forEach(
+                    hotel => {
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        item.className =
+                            "booking-item";
+
+
+                        item.innerHTML = `
+                            <div class="booking-title">
+                                ${hotel.hotel_name}
+                            </div>
+
+                            <div class="booking-details">
+                                📍 ${hotel.address || "Address not available"}
+
+                                <br>
+
+                                Check-in:
+                                ${hotel.check_in_date}
+                                ${
+                                    hotel.check_in_time
+                                        ? " " +
+                                          hotel.check_in_time.substring(0, 5)
+                                        : ""
+                                }
+
+                                <br>
+
+                                Check-out:
+                                ${hotel.check_out_date}
+                                ${
+                                    hotel.check_out_time
+                                        ? " " +
+                                          hotel.check_out_time.substring(0, 5)
+                                        : ""
+                                }
+
+                                <br>
+
+                                Booking:
+                                ${hotel.booking_reference || "N/A"}
+                            </div>
+                        `;
+
+
+                        hotelSection.appendChild(
+                            item
+                        );
+
+                    }
+                );
 
             }
+
+
+            container.appendChild(
+                hotelSection
+            );
+
+
+            /* =========================
+               ACTIVITIES
+            ========================== */
+
+            const activitySection =
+                document.createElement(
+                    "div"
+                );
+
+
+            activitySection.className =
+                "booking-section";
+
+
+            activitySection.innerHTML =
+                "<h3>📍 Activities</h3>";
+
+
+            if (activities.length === 0) {
+
+                activitySection.innerHTML +=
+                    "<p>No activities added.</p>";
+
+            } else {
+
+                activities.forEach(
+                    activity => {
+
+                        const item =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        item.className =
+                            "booking-item";
+
+
+                        item.innerHTML = `
+                            <div class="booking-title">
+                                ${activity.name}
+                            </div>
+
+                            <div class="booking-details">
+                                ${activity.description || ""}
+
+                                <br>
+
+                                ${activity.activity_date || "Date not set"}
+
+                                ${
+                                    activity.start_time
+                                        ? " " +
+                                          activity.start_time.substring(0, 5)
+                                        : ""
+                                }
+
+                                ${
+                                    activity.end_time
+                                        ? " – " +
+                                          activity.end_time.substring(0, 5)
+                                        : ""
+                                }
+
+                                <br>
+
+                                📍 ${activity.location || "Location not set"}
+                            </div>
+                        `;
+
+
+                        activitySection.appendChild(
+                            item
+                        );
+
+                    }
+                );
+
+            }
+
+
+            container.appendChild(
+                activitySection
+            );
+
+
+        } catch (error) {
+
+            console.error(error);
+
+
+            container.textContent =
+                "Could not load bookings.";
+
         }
 
-    </script>
+    }
+
+async function loadItinerary() {
+
+    const container =
+        document.getElementById(
+            "itinerary"
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/trips/" +
+                tripId +
+                "/itinerary"
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not load itinerary"
+            );
+
+        }
+
+
+        const items =
+            await response.json();
+
+
+        if (items.length === 0) {
+
+            container.innerHTML =
+                "<p>" +
+                "No itinerary generated yet." +
+                "</p>";
+
+            return;
+
+        }
+
+
+        renderItinerary(
+            items
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+
+        container.innerHTML =
+            "<p>" +
+            "Could not load itinerary." +
+            "</p>";
+
+    }
+
+}    
+
+    /* =========================
+       GENERATE ITINERARY
+    ========================== */
+
+async function generateItinerary() {
+
+    const button =
+        document.getElementById(
+            "generateButton"
+        );
+
+    const status =
+        document.getElementById(
+            "status"
+        );
+
+    button.disabled = true;
+
+    button.textContent =
+        "Generating AI Itinerary...";
+
+    status.textContent =
+        "TripPilot AI is planning your itinerary...";
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/trips/" +
+                tripId +
+                "/generate-ai-itinerary",
+                {
+                    method: "POST"
+                }
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+                "AI itinerary generation failed"
+            );
+
+        }
+
+        const data =
+            await response.json();
+
+        console.log(
+            "AI itinerary response:",
+            data
+        );
+
+        if (
+            data.status ===
+            "valid"
+        ) {
+
+            status.innerHTML =
+                '<div class="success">' +
+                '✓ AI itinerary generated successfully.' +
+                '</div>';
+
+            await loadItinerary();
+
+        } else {
+
+            status.textContent =
+                "AI itinerary could not be generated.";
+
+            renderConflicts(
+                data.conflicts
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+        status.textContent =
+            "Could not generate AI itinerary.";
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Generate AI Itinerary";
+
+    }
+
+}
+    /* =========================
+       RENDER ITINERARY
+    ========================== */
+
+    function renderItinerary(items) {
+
+        const container =
+            document.getElementById(
+                "itinerary"
+            );
+
+
+        container.innerHTML = "";
+
+
+        /*
+         * Group itinerary items by date.
+         */
+
+        const grouped = {};
+
+
+        items.forEach(
+            item => {
+
+                if (
+                    !grouped[
+                        item.activity_date
+                    ]
+                ) {
+
+                    grouped[
+                        item.activity_date
+                    ] = [];
+
+                }
+
+
+                grouped[
+                    item.activity_date
+                ].push(item);
+
+            }
+        );
+
+
+        /*
+         * Create one section
+         * for each day.
+         */
+
+        Object.keys(grouped)
+            .sort()
+            .forEach(
+                date => {
+
+                    const dayContainer =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    dayContainer.className =
+                        "itinerary-day";
+
+
+                    /*
+                     * Format date.
+                     */
+
+                    const dateObject =
+                        new Date(
+                            date +
+                            "T00:00:00"
+                        );
+
+
+                    const formattedDate =
+                        dateObject.toLocaleDateString(
+                            "en-US",
+                            {
+                                weekday: "long",
+                                month: "short",
+                                day: "numeric"
+                            }
+                        );
+
+
+                    const dateElement =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    dateElement.className =
+                        "itinerary-date";
+
+
+                    dateElement.textContent =
+                        formattedDate;
+
+
+                    dayContainer.appendChild(
+                        dateElement
+                    );
+
+
+                    /*
+                     * Timeline.
+                     */
+
+                    const timeline =
+                        document.createElement(
+                            "div"
+                        );
+
+
+                    timeline.className =
+                        "timeline";
+
+
+                    grouped[date].forEach(
+                        item => {
+
+                            const element =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            element.className =
+                                "itinerary-item";
+
+
+                            /*
+                             * Icon.
+                             */
+
+                            const icon =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            icon.className =
+                                "timeline-icon";
+
+
+                            if (
+                                item.item_type ===
+                                "flight"
+                            ) {
+
+                                icon.textContent =
+                                    "✈️";
+
+                            } else if (
+                                item.item_type ===
+                                "hotel_check_in" ||
+                                item.item_type ===
+                                "hotel_check_out"
+                            ) {
+
+                                icon.textContent =
+                                    "🏨";
+
+                            } else {
+
+                                icon.textContent =
+                                    "📍";
+
+                            }
+
+
+                            /*
+                             * Time.
+                             */
+
+                            const time =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            time.className =
+                                "time";
+
+
+                            if (
+                                item.start_time
+                            ) {
+
+                                let timeText =
+                                    item.start_time.substring(
+                                        0,
+                                        5
+                                    );
+
+
+                                if (
+                                    item.end_time
+                                ) {
+
+                                    timeText +=
+                                        " – " +
+                                        item.end_time.substring(
+                                            0,
+                                            5
+                                        );
+
+                                }
+
+
+                                time.textContent =
+                                    timeText;
+
+                            } else {
+
+                                time.textContent =
+                                    "All day";
+
+                            }
+
+
+                            /*
+                             * Content.
+                             */
+
+                            const content =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            content.className =
+                                "itinerary-content";
+
+
+                            const title =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            title.className =
+                                "title";
+
+
+                            title.textContent =
+                                item.title;
+
+
+                            const description =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            description.className =
+                                "description";
+
+
+                            description.textContent =
+                                item.description ||
+                                "";
+
+
+                            const location =
+                                document.createElement(
+                                    "div"
+                                );
+
+
+                            location.className =
+                                "location";
+
+
+                            location.textContent =
+                                item.location
+                                    ? "📍 " +
+                                      item.location
+                                    : "";
+
+
+                            content.appendChild(
+                                title
+                            );
+
+
+                            content.appendChild(
+                                description
+                            );
+
+
+                            content.appendChild(
+                                location
+                            );
+
+
+                            element.appendChild(
+                                icon
+                            );
+
+
+                            element.appendChild(
+                                time
+                            );
+
+
+                            element.appendChild(
+                                content
+                            );
+
+
+                            timeline.appendChild(
+                                element
+                            );
+
+                        }
+                    );
+
+
+                    dayContainer.appendChild(
+                        timeline
+                    );
+
+
+                    container.appendChild(
+                        dayContainer
+                    );
+
+                }
+            );
+
+    }
+
+
+    /* =========================
+       RENDER CONFLICTS
+    ========================== */
+
+    function renderConflicts(
+        conflicts
+    ) {
+
+        const container =
+            document.getElementById(
+                "itinerary"
+            );
+
+
+        container.innerHTML = "";
+
+
+        const conflictBox =
+            document.createElement(
+                "div"
+            );
+
+
+        conflictBox.className =
+            "conflicts";
+
+
+        conflictBox.innerHTML =
+            "<strong>" +
+            "Itinerary conflicts detected" +
+            "</strong>";
+
+
+        container.appendChild(
+            conflictBox
+        );
+
+    }
+
+
+    /* =========================
+       INITIAL PAGE LOAD
+    ========================== */
+
+    loadTrips();
+
+
+</script>
+```
 
 </body>
+
 </html>
