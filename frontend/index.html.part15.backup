@@ -189,44 +189,6 @@
         padding: 15px 18px;
     }
 
-    .title-row {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    .itinerary-badge {
-        display: inline-flex;
-        align-items: center;
-        padding: 3px 8px;
-        border-radius: 999px;
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 0.4px;
-        white-space: nowrap;
-    }
-
-    .ai-badge {
-        background: #f3e8ff;
-        color: #7e22ce;
-    }
-
-    .fixed-badge {
-        background: #dbeafe;
-        color: #1d4ed8;
-    }
-
-    .hotel-badge {
-        background: #dcfce7;
-        color: #15803d;
-    }
-
-    .booked-badge {
-        background: #f1f5f9;
-        color: #475569;
-    }
-
     .title {
         font-size: 18px;
         font-weight: bold;
@@ -1455,16 +1417,6 @@ async function generateItinerary() {
                                 "itinerary-content";
 
 
-                            const titleRow =
-                                document.createElement(
-                                    "div"
-                                );
-
-
-                            titleRow.className =
-                                "title-row";
-
-
                             const title =
                                 document.createElement(
                                     "div"
@@ -1477,68 +1429,6 @@ async function generateItinerary() {
 
                             title.textContent =
                                 item.title;
-
-
-                            const badge =
-                                document.createElement(
-                                    "span"
-                                );
-
-
-                            if (
-                                item.item_type ===
-                                "ai_activity"
-                            ) {
-
-                                badge.textContent =
-                                    "✨ AI SUGGESTION";
-
-                                badge.className =
-                                    "itinerary-badge ai-badge";
-
-                            } else if (
-                                item.item_type ===
-                                "flight"
-                            ) {
-
-                                badge.textContent =
-                                    "FIXED";
-
-                                badge.className =
-                                    "itinerary-badge fixed-badge";
-
-                            } else if (
-                                item.item_type ===
-                                "hotel_check_in" ||
-                                item.item_type ===
-                                "hotel_check_out"
-                            ) {
-
-                                badge.textContent =
-                                    "HOTEL";
-
-                                badge.className =
-                                    "itinerary-badge hotel-badge";
-
-                            } else {
-
-                                badge.textContent =
-                                    "BOOKED";
-
-                                badge.className =
-                                    "itinerary-badge booked-badge";
-
-                            }
-
-
-                            titleRow.appendChild(
-                                title
-                            );
-
-
-                            titleRow.appendChild(
-                                badge
-                            );
 
 
                             const description =
@@ -1574,7 +1464,7 @@ async function generateItinerary() {
 
 
                             content.appendChild(
-                                titleRow
+                                title
                             );
 
 

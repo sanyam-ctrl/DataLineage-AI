@@ -99,6 +99,12 @@ def save_ai_itinerary_items(
     items: list[dict],
 ) -> List[ItineraryItem]:
 
+    # Remove previously generated AI activities only.
+    db.query(ItineraryItem).filter(
+        ItineraryItem.trip_id == trip_id,
+        ItineraryItem.item_type == "ai_activity",
+    ).delete()
+
     saved_items = []
 
     for item_data in items:
@@ -110,7 +116,7 @@ def save_ai_itinerary_items(
             title=item_data["title"],
             description=item_data["description"],
             location=item_data["location"],
-            item_type=item_data["item_type"],
+            item_type="ai_activity",
         )
 
         db.add(item)

@@ -3,10 +3,14 @@ from typing import List
 from sqlalchemy.orm import Session
 
 from app.models.trip import Trip
+from app.repositories import trip_repository
 from app.schemas.trip import TripCreate
 
 
-def create_trip(db: Session, trip_data: TripCreate) -> Trip:
+def create_trip(
+    db: Session,
+    trip_data: TripCreate,
+) -> Trip:
     trip = Trip(
         name=trip_data.name,
         destination=trip_data.destination,
@@ -17,12 +21,10 @@ def create_trip(db: Session, trip_data: TripCreate) -> Trip:
         currency=trip_data.currency,
     )
 
-    db.add(trip)
-    db.commit()
-    db.refresh(trip)
-
-    return trip
+    return trip_repository.create(db, trip)
 
 
-def get_trips(db: Session) -> List[Trip]:
-    return db.query(Trip).all()
+def get_trips(
+    db: Session,
+) -> List[Trip]:
+    return trip_repository.get_all(db)

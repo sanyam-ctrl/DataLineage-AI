@@ -36,30 +36,9 @@ def generate_ai_itinerary(
         for item in ai_result.items
     ]
 
-    # Keep only existing fixed/booked itinerary items.
-    # Previously generated AI activities are excluded so
-    # regeneration does not conflict with the old AI result.
-    existing_items = [
-        {
-            "activity_date": item.activity_date,
-            "start_time": item.start_time,
-            "end_time": item.end_time,
-            "title": item.title,
-            "description": item.description,
-            "location": item.location,
-            "item_type": item.item_type,
-        }
-        for item in trip_context.itinerary
-        if item.item_type != "ai_activity"
-    ]
-
-    # Validate the complete itinerary:
-    # existing fixed/booked items + newly generated AI items.
-    combined_items = existing_items + ai_items
-
     validation_result = prepare_trip_itinerary(
         trip_context,
-        combined_items
+        ai_items
     )
 
     conflicts = validation_result["conflicts"]
@@ -91,4 +70,3 @@ def generate_ai_itinerary(
         "conflicts": conflicts,
         "saved": True,
     }
-
